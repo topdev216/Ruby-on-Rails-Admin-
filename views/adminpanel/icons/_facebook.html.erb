@@ -1,0 +1,29 @@
+<%
+if @model.fb_share? && can?(:publish, @model)
+  if @fb_auths_count.nil?
+    link = get_oauth_link(resource)
+    options = {}
+  else
+    link = '#'
+    options = { target: "#fb-#{resource.id}", toggle: 'modal' }
+  end
+  options[:toggle] ||= ''
+  options[:toggle] << ' tooltip'
+  options[:title] = 'Compartir en Facebook'
+%>
+  <%=
+    link_to(
+      content_tag(
+        :i,
+        nil,
+        class: 'fa fa-facebook'
+      ),
+      link,
+      title: 'Compartir en Facebook',
+      id: 'resource-publish',
+      data: options
+    )
+  %>
+  <!-- the modal that it's going to toggle if exist the fb acces token -->
+  <%= render 'adminpanel/shared/fb_publish_modal', resource: resource %>
+<% end %>

@@ -1,0 +1,18 @@
+<%=
+link_to(
+  I18n.t('other.add',
+    model: "adminpanel/#{remote_model}".classify.constantize.display_name
+  ),
+  polymorphic_path(
+    [:new, :"#{remote_model}"],
+    model: @model.display_name,
+    model_name: @model.name.demodulize.downcase,
+    belongs_request: defined?(belongs_request)
+  ),
+  class: 'btn btn-info',
+  id: "#{remote_model}-modal-link",
+  :'data-target' => "#remote-form-modal",
+  :'data-toggle' => 'modal',
+  remote: true
+)
+%>

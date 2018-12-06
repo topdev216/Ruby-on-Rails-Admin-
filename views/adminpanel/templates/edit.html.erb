@@ -1,0 +1,42 @@
+<% provide(
+  :page_title,
+  I18n.t('action.update', resource: @resource_instance.name)
+) -%>
+<% breadcrumb_add(
+  @model.collection_name,
+  {
+    controller: params[:controller],
+    action: 'index'
+  }
+) unless params[:skip_breadcrumb].present? %>
+
+<div class = "row-fluid">
+  <div class = "widget widget-padding span12">
+    <div class = "widget-header">
+      <%= content_tag(:i, nil, class: "fa fa-#{@model.icon}") %>
+      <h5><%= I18n.t('action.update', resource: @resource_instance.name) %></h5>
+    </div>
+    <%= adminpanel_form_for(
+      @resource_instance,
+      html: {
+        class: 'form-horizontal',
+        id: 'edit_resource'
+      }
+    ) do |f| -%>
+
+      <%= f.body do %>
+        <%= render 'adminpanel/shared/error_messages', object: @resource_instance %>
+        <%= render 'adminpanel/shared/form_fields', f: f %>
+      <% end %>
+
+      <%= f.footer do %>
+        <%= f.submit(
+          I18n.t('action.update', resource: @resource_instance.name),
+          id: "edit-#{@model.name.demodulize}-button"
+        ) %>
+      <% end %>
+
+    <% end -%>
+  </div>
+</div>
+<%= render 'adminpanel/shared/modal', id: 'remote-form-modal' %>

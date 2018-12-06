@@ -1,0 +1,19 @@
+<% if @model.has_route?(:edit) && can?(:update, @model) %>
+  <%=
+    link_to(
+      content_tag(
+        :i,
+        nil,
+        class: 'fa fa-pencil'
+      ),
+      [:edit, resource],
+      title: I18n.t('action.update', resource: resource.name),
+      data: {
+        toggle: :tooltip,
+        placement: :left,
+        title: I18n.t('action.update', resource: resource.name)
+      },
+      class: 'tip spinner-link'
+    )
+  %>
+<% end %>

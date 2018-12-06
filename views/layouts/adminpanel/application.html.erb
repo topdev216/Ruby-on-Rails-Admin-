@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= full_title(yield(:page_title)) %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= javascript_include_tag "adminpanel/application", "data-turbolinks-track" => true %>
+    <%= stylesheet_link_tag    "adminpanel/application", media: "all", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag "adminpanel/favicon.ico" %>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+
+    <%= render 'layouts/adminpanel/shim' %>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <% cache ['top_bar', current_user] do %>
+        <%= render 'layouts/adminpanel/top_bar' %>
+      <% end %>
+      <div class="container-fluid">
+        <%= render 'layouts/adminpanel/side_menu' %>
+          <!-- Main window -->
+          <div class="main_container" id="dashboard_page">
+            <div class = "row-fluid">
+              <%= render_breadcrumb '/' %>
+              <h2 class = "heading"><%= yield(:page_title) %></h2>
+            </div>
+            <% flash.each do |key, value| %>
+              <div class = "alert alert-<%= key %>"><%= value %></div>
+            <% end %>
+            <%= yield %>
+            <%= debug(params) if Rails.env.development? %>
+          </div>
+          <!-- /Main window -->
+      </div>
+      <!--/.fluid-container-->
+    </div>
+    <!-- wrap ends-->
+  </body>
+    <%= yield :scripts %>
+</html>

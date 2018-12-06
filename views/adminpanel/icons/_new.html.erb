@@ -1,0 +1,22 @@
+<% if @model.has_route?(:new) && can?(:create, @model) %>
+  <%=
+    link_to(
+      content_tag(
+        :i,
+        nil,
+        class: 'fa fa-plus'
+      ),
+      {
+        controller: params[:controller],
+        action: :new
+      },
+      title: I18n.t('action.create', resource: @model.display_name),
+      class: 'spinner-link',
+      data: {
+        toggle: :tooltip,
+        placement: :left,
+        title: I18n.t('action.create', resource: @model.display_name),
+      }
+    )
+  %>
+<% end %>

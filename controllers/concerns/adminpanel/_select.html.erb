@@ -1,0 +1,49 @@
+<%
+  block = properties['options']
+  args = properties.except('options')
+  collection = block.call(f.object)
+  if collection.class.to_s.demodulize == 'ActiveRecord_Relation'
+    properties['id_method'] ||= :id
+    properties['name_method'] ||= :name
+    collection = options_from_collection_for_select(
+                    collection,
+                    properties['id_method'],
+                    properties['name_method'],
+                    @resource_instance.try(attribute)
+                  )
+
+  elsif ['Hash', 'Array', 'HashWithIndifferentAccess'].include? collection.class.to_s.demodulize
+    if properties['grouped'].present? && properties['grouped']
+      collection = grouped_options_for_select(collection, @resource_instance.try(attribute))
+    else
+      collection = options_for_select(collection, @resource_instance.try(attribute))
+    end
+  end
+%>
+<% if args['multiple'].present? %>
+
+  <div class="control-group">
+    <%= label_tag (args['label'] || f.object.class.human_attribute_name(attribute)), nil, {class: "control-label"} %>
+    <div class="controls">
+      <%= select_tag "#{model_name_from_record_or_class(f.object).param_key}[#{attribute}][]", collection, args.reverse_merge!(data: {adminpanel_select2: true}, class: 'span7') %>
+    </div>
+  </div>
+<% else %>
+  <%= f.select attribute, collection, { include_blank: true }, args  %>
+<% end %>
+
+<% if !is_modal &&
+  (
+    properties['remote_resource'].nil? ||
+    properties['remote_resource']
+  ) %>
+  <!-- if rendering the form inside a modal, so we don't have to
+  manage infinited nested forms and if it's supposed to be
+  created in relation model -->
+
+  <%= render(
+      'adminpanel/shared/create_remote_resource_button',
+      belongs_request: true,
+      remote_model: attribute.gsub('_id', '')
+  ) %>
+<% end %>

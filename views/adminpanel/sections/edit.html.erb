@@ -1,0 +1,29 @@
+<% provide(:page_title, I18n.t('section.edit', title: @section.name)) %>
+<% breadcrumb_add('Secciones', sections_path) %>
+<% breadcrumb_add(@section.name, section_path(@section)) %>
+<div class="row-fluid">
+  <div class = "widget widget-padding span12">
+    <div class = "widget-header">
+      <i class = "fa fa-tasks"></i>
+      <h5><%= @section.name %></h5>
+    </div>
+    <%= adminpanel_form_for @section do |f| %>
+      <%= f.body do %>
+        <%= render 'adminpanel/shared/error_messages', :object => @section %>
+
+        <% if @section.has_description %>
+          <%= f.wysiwyg_field 'description', 'label' => I18n.t('section.description') %>
+        <% else %>
+          <%= f.text_field 'description', 'label' => t("section.description") %>
+        <% end %>
+
+        <% if @section.has_image %>
+          <%= render 'adminpanel/form/adminpanel_file_field', properties: { label: 'Imágenes', max_files: @section.max_files }, f: f, attribute: 'sectionfiles' %>
+        <% end %>
+      <% end %>
+      <%= f.footer do %>
+        <%= f.submit t('action.save', resource: @section.name), data: {:disable_with => t("action.submitting")}, :id => "save-button" %>
+      <% end %>
+    <% end -%>
+  </div>
+</div>

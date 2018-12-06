@@ -1,0 +1,22 @@
+<% if @model.has_route?(:destroy) && can?(:destroy, @model) %>
+  <%=
+    link_to(
+      content_tag(
+        :i,
+        nil,
+        class: 'fa fa-trash-o'
+      ),
+      [resource],
+      title: I18n.t('action.delete', resource: resource.name),
+      id: 'resource-delete',
+      method: :delete,
+      remote: true,
+      data: {
+        toggle: :tooltip,
+        placement: :left,
+        title: I18n.t('action.delete', resource: resource.name),
+        confirm: I18n.t('action.delete_confirmation', resource: resource.name)
+      }
+    )
+  %>
+<% end %>

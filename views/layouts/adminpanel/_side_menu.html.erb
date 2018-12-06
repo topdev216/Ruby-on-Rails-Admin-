@@ -1,0 +1,78 @@
+<div class="sidebar-nav nav-collapse collapse" id="sidebar-navigation">
+  <% cache ["name", current_user] do %>
+    <div class="user_side clearfix">
+      <h5>
+        <%= current_user.name.humanize %>
+      </h5>
+      <%= link_to(
+        current_user.role.name,
+        "#"
+      ) %>
+    </div>
+  <% end %>
+  <div class="accordion" id="search-modules">
+
+    <div class="accordion-group" data-no-filter="true">
+      <div class="accordion-heading">
+        <%= text_field_tag :text,
+                            '',
+                            class: 'search-input',
+                            id: 'search-input',
+                            placeholder: I18n.t('search.placeholder'),
+                            autocomplete: :off,
+                            autofocus: true
+        %>
+      </div>
+    </div>
+
+    <!-- Render models -->
+    <% Adminpanel.displayable_resources.each do |resource| %>
+      <% resource_class = symbol_class(resource) %>
+      <% if resource_class.has_route?(:index) && (can?(:read, resource_class) || can?( :publish, resource_class)) %>
+
+        <div class="accordion-group" data-filter="<%= resource_class.collection_name -%>">
+          <div class="accordion-heading">
+            <%= link_to(
+              [route_symbol(resource.to_s)],
+              data: {
+                no_transition_cache: true
+              },
+              class: "accordion-toggle accordion-navigation #{is_current_section?(resource_class.display_name)} spinner-link"
+            ) do %>
+              <%= content_tag(
+                :i,
+                nil,
+                class: "fa fa-#{resource_class.icon}"
+              ) %>
+              <%= resource_class.collection_name %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- Render pages -->
+    <% Adminpanel.displayable_pages.each do |page_class| %>
+      <div class="accordion-group" data-filter="<%= page_class.instance.name -%>">
+        <div class="accordion-heading">
+          <%= link_to(
+            page_path(page_class.instance),
+            data: {
+              no_transition_cache: true
+            },
+            class: "accordion-toggle accordion-navigation
+                    #{params[:controller] == 'adminpanel/pages' && page_class.instance.id.to_s == params[:id].to_s ? 'active' : ''}
+                    spinner-link".squish
+          ) do %>
+            <%= content_tag(
+              :i,
+              nil,
+              class: "fa fa-#{page_class.icon}"
+            ) %>
+            <%= page_class.instance.name %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

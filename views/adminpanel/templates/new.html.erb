@@ -1,0 +1,42 @@
+<% provide(
+  :page_title,
+  I18n.t('action.create', resource: @model.display_name.capitalize)
+) -%>
+<% breadcrumb_add(
+  @model.collection_name,
+  {
+    controller: params[:controller],
+    action: 'index'
+  }
+) %>
+
+<div class = "row-fluid">
+  <div class = "widget widget-padding span12">
+    <div class = "widget-header">
+      <i class = "fa fa-<%= @model.icon -%>"></i>
+      <h5><%= I18n.t('action.create', resource: @model.display_name) %></h5>
+    </div>
+    <%= adminpanel_form_for(
+      @resource_instance,
+      html: {
+        class: 'form-horizontal',
+        id: 'new_resource'
+      }
+    ) do |f| -%>
+
+      <%= f.body do %>
+        <%= render 'adminpanel/shared/error_messages', object: @resource_instance %>
+        <%= render 'adminpanel/shared/form_fields', f: f %>
+      <% end %>
+
+      <%= f.footer do %>
+        <%= f.submit(
+          I18n.t('action.add', resource: @model.display_name),
+          id: "new-#{@model.name.demodulize}-button"
+        ) %>
+      <% end %>
+
+    <% end -%>
+  </div>
+</div>
+<%= render 'adminpanel/shared/modal', id: 'remote-form-modal' %>

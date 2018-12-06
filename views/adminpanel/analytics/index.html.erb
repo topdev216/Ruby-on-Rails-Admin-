@@ -1,0 +1,15 @@
+<% provide(:page_title, 'Analytics') -%>
+
+<div class="row-fluid">
+  <div class="widget widget-padding span12">
+    <div class="widget-header">
+      <%= render 'header' %>
+    </div>
+    <%= content_tag :div, class: "widget-body", data: { visits: @visits } do %>
+      <p>
+        Bienvenido al Centro de Estadísticas del Sitio, para verlas haga click en alguno de los botones de arriba,
+        para cualquier duda, necesidad de algún servicio o aclaración por favor, comunícate a <a href="mailto:info@codn.mx">info@codn.mx</a>
+      </p>
+    <% end %>
+  </div>
+</div>
